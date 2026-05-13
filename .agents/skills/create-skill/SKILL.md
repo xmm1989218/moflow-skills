@@ -38,10 +38,10 @@ Every skill lives in `skills/<name>/SKILL.md` with YAML frontmatter:
 ---
 name: <name>
 description: "<1-1024 char description>"
+version: "1.0.0"
 license: MIT
 metadata:
   author: moflow
-  version: "1.0"
 ---
 
 ## What I Do
@@ -60,6 +60,7 @@ metadata:
 |-------|----------|-------------|
 | `name` | Yes | Must match directory name, follow naming rules above |
 | `description` | Yes | 1-1024 characters |
+| `version` | Yes | Semver format: `x.y.z` |
 
 ### Optional frontmatter fields
 
@@ -78,11 +79,11 @@ After creating the skill directory, add an entry to `registry.yaml` under `skill
 skills:
   - name: <name>
     description: "<same as SKILL.md description>"
+    version: "1.0.0"
     license: MIT
     hasScripts: false
     metadata:
       author: moflow
-      version: "1.0"
 ```
 
 Set `hasScripts: true` only if the skill includes a `scripts/` subdirectory.
@@ -109,10 +110,20 @@ When asked to create a new skill, follow these steps:
 1. **Ask for name and description** if not provided
 2. **Validate name** against naming rules
 3. **Create directory** `skills/<name>/`
-4. **Write SKILL.md** with proper frontmatter and body
-5. **Update registry.yaml** — add the new skill entry to the `skills` list
+4. **Write SKILL.md** with proper frontmatter (including `version: "1.0.0"`) and body
+5. **Update registry.yaml** — add the new skill entry to the `skills` list (including matching `version`)
 6. **Run lint** — execute `bun run lint` and fix any errors
 7. **Confirm** — report what was created and the lint result
+
+## Version Rules
+
+- New skills always start at `version: "1.0.0"`
+- Any content change requires a version bump:
+  - **Patch** `1.0.0` → `1.0.1`: typo fixes, minor tweaks
+  - **Minor** `1.0.0` → `1.1.0`: new content, feature enhancements
+  - **Major** `1.0.0` → `2.0.0`: breaking changes
+- Lint will detect content changes without a version update (version drift)
+- Update `version` in **both** SKILL.md and registry.yaml
 
 ## Important Notes
 

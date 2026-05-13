@@ -3,7 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "lint": "node scripts/lint.mjs"
+    "lint": "node scripts/lint.mjs",
+    "release": "node scripts/release.mjs"
   },
   "devDependencies": {
     "js-yaml": "^4.1.0",

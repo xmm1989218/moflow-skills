@@ -34,10 +34,10 @@ Examples: `documentation`, `polish-writing`, `api-docs`, `git-release`
 ---
 name: <name>
 description: "<1-1024 char description of what this skill does and when to use it>"
+version: "1.0.0"
 license: MIT
 metadata:
   author: moflow
-  version: "1.0"
 ---
 
 ## What I Do
@@ -50,7 +50,7 @@ metadata:
 <detailed instructions for the AI when this skill is active>
 ```
 
-**Required fields**: `name`, `description`
+**Required fields**: `name`, `description`, `version`
 
 **Optional fields**: `license`, `compatibility`, `metadata`, `allowed-tools`
 
@@ -77,11 +77,11 @@ Add an entry to the `skills` list in `registry.yaml`:
 skills:
   - name: <name>
     description: "<same as SKILL.md description>"
+    version: "1.0.0"
     license: MIT
     hasScripts: false
     metadata:
       author: moflow
-      version: "1.0"
 ```
 
 Set `hasScripts: true` if the skill has a `scripts/` directory with files.
@@ -98,16 +98,50 @@ Fix any errors before committing.
 
 Commit your changes and open a pull request against the `master` branch.
 
+## Modifying an Existing Skill
+
+When modifying skill content (SKILL.md body, scripts/), you **must** update the `version` field:
+
+- **Patch** `1.0.0` → `1.0.1`: typo fixes, minor tweaks
+- **Minor** `1.0.0` → `1.1.0`: new content, feature enhancements
+- **Major** `1.0.0` → `2.0.0`: breaking changes
+
+Update `version` in **both** `SKILL.md` and `registry.yaml` — they must match.
+
+Lint will detect content changes without a version bump (version drift).
+
 ## Lint Rules
 
 | # | Check |
 |---|-------|
-| 1 | SKILL.md frontmatter must include `name` and `description` |
+| 1 | SKILL.md frontmatter must include `name`, `description`, and `version` |
 | 2 | `name` must match the directory name |
 | 3 | `name` must match `^[a-z][a-z0-9]*(-[a-z0-9]+)*$` (1-64 chars) |
 | 4 | `description` must be 1-1024 characters |
 | 5 | Skills in registry.yaml must have a corresponding `skills/<name>/` directory |
 | 6 | Directories under `skills/` must be registered in registry.yaml |
+| 7 | `version` must match semver format `x.y.z` |
+| 8 | `version` in SKILL.md and registry.yaml must be consistent |
+
+Lint also detects version drift: skill content changed but version not updated → error.
+
+## Release
+
+After PRs are merged to master, run:
+
+```bash
+bun run release
+```
+
+This script:
+
+1. Validates lint passes
+2. Bumps `registry.yaml` version (auto-increment)
+3. Generates changelog from git log
+4. Commits, tags, pushes
+5. Creates GitHub Release with changelog
+
+MoFlow consumes releases via GitHub API (`/releases/latest`) and downloads skill files at the corresponding tag.
 
 ## CI
 

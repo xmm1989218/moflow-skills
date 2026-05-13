@@ -1,9 +1,10 @@
 ---
 name: documentation
 description: Write clear, well-structured technical documentation. Use when writing README, API docs, architecture docs, or any technical documentation.
+version: "1.0.0"
+license: MIT
 metadata:
   author: moflow
-  version: "1.0"
 ---
 
 ## Documentation Writing Guidelines

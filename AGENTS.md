@@ -16,6 +16,7 @@ moflow-skills is the remote skill repository for [MoFlow](https://github.com/xmm
 | Command | Description |
 |---|---|
 | `bun run lint` | Validate all skills and registry.yaml |
+| `bun run release` | Bump registry version, create tag and GitHub Release |
 
 **Always run after adding or modifying a skill:**
 - `bun run lint` — ensure all checks pass
@@ -29,7 +30,8 @@ moflow-skills is the remote skill repository for [MoFlow](https://github.com/xmm
 .github/workflows/
   lint.yml               # CI: run lint on PR/push to master
 scripts/
-  lint.mjs               # Lint script (6 validation checks)
+  lint.mjs               # Lint script (8 validation checks + version drift detection)
+  release.mjs            # Release script (bump, tag, GitHub Release)
 skills/                  # Distributable skills (registered in registry.yaml)
   documentation/
     SKILL.md
@@ -47,17 +49,20 @@ The lint script (`bun run lint`) enforces these checks:
 
 | # | Check | Level |
 |---|-------|-------|
-| 1 | SKILL.md frontmatter must include `name` and `description` | error |
+| 1 | SKILL.md frontmatter must include `name`, `description`, and `version` | error |
 | 2 | `name` must match the directory name | error |
 | 3 | `name` must match `^[a-z][a-z0-9]*(-[a-z0-9]+)*$` (1-64 chars) | error |
 | 4 | `description` must be 1-1024 characters | error |
 | 5 | Skills in registry.yaml must have a corresponding `skills/<name>/` directory | error |
 | 6 | Directories under `skills/` must be registered in registry.yaml | error |
+| 7 | `version` must match semver format `x.y.z` | error |
+| 8 | `version` in SKILL.md and registry.yaml must be consistent | error |
 
 Additional checks:
 - Script files must have `.py`, `.js`, or `.sh` extensions
-- registry.yaml must have a valid `version` field
+- registry.yaml must have a valid `version` field (auto-incremented integer)
 - No duplicate skill names in registry.yaml
+- Version drift detection: if skill content changed but version not updated → error (requires git history)
 
 ## Skill Format
 
@@ -76,11 +81,11 @@ skills/<name>/
 ---
 name: <name>                    # Required, must match directory name
 description: "<text>"           # Required, 1-1024 chars
+version: "1.0.0"                # Required, semver (x.y.z)
 license: MIT                    # Optional
 compatibility: ">=0.9.0"        # Optional, version constraint
 metadata:                       # Optional, string-to-string map
   author: moflow
-  version: "1.0"
 allowed-tools: "outline,read"   # Optional, comma-separated tool list
 ---
 ```
@@ -108,23 +113,34 @@ The body is injected into the AI's context when the skill is activated. Structur
 - Must not contain consecutive `--`
 - Regex: `^[a-z][a-z0-9]*(-[a-z0-9]+)*$`
 
+### Version rules
+
+- Each skill has its own semver version (`x.y.z`)
+- Any content change to `skills/<name>/` (SKILL.md body, scripts/) requires a version bump
+- Version bumps:
+  - **Patch** `1.0.0` → `1.0.1`: typo fixes, minor tweaks
+  - **Minor** `1.0.0` → `1.1.0`: new content, feature enhancements
+  - **Major** `1.0.0` → `2.0.0`: breaking changes
+- Lint will detect content changes without version updates (version drift)
+
 ## registry.yaml Format
 
 ```yaml
-version: 1
-updated: "YYYY-MM-DD"
+version: 1                      # Auto-incremented integer, bumped on each release
+updated: "YYYY-MM-DD"           # Last release date
 skills:
   - name: <name>
     description: "<same as SKILL.md>"
+    version: "1.0.0"            # Same as SKILL.md version
     license: MIT
     hasScripts: false
     metadata:
       author: moflow
-      version: "1.0"
 ```
 
+- `version` must match the skill's SKILL.md version
 - `hasScripts` must be `true` if the skill has a `scripts/` directory with files
-- `updated` should reflect the last modification date
+- `updated` is set by the release script
 
 ## Two Skill Locations
 
@@ -137,10 +153,25 @@ Skills in `.agents/skills/` are NOT distributed to moflow users. They exist only
 
 ## Adding a New Skill
 
-1. Create `skills/<name>/SKILL.md` with valid frontmatter and body
-2. Add entry to `registry.yaml` under `skills:`
+1. Create `skills/<name>/SKILL.md` with valid frontmatter (including `version`) and body
+2. Add entry to `registry.yaml` under `skills:` (including matching `version`)
 3. Run `bun run lint`
 4. Fix any errors
 5. Commit and push
+6. Open a pull request
 
 Or use the `create-skill` meta-skill from `.agents/skills/` if available.
+
+## Release Flow
+
+1. Merge PR(s) to master
+2. Run `bun run release`
+   - Validates lint passes
+   - Bumps `registry.yaml` version (auto-increment)
+   - Generates changelog from git log (compared to last tag)
+   - Commits, tags, pushes
+   - Creates GitHub Release with changelog
+3. MoFlow consumes via GitHub API:
+   - `GET /releases/latest` → get tag
+   - Read `registry.yaml` at that tag → discover skills
+   - Download skill files from that tag → install locally

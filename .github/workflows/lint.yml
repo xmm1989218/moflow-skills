@@ -16,4 +16,6 @@ jobs:
 
       - run: bun install
 
+      - run: git fetch origin master
+
       - run: bun run lint
