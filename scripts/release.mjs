@@ -17,12 +17,29 @@ function fail(msg) {
 }
 
 function getLatestChangelogEntry(content) {
-  const match = content.match(/^## (v[^\n]+)\n([\s\S]*?)(?=\n## v|\n*$)/m);
-  if (!match) return null;
+  const lines = content.split("\n");
+  let start = -1;
+  let end = lines.length;
+
+  for (let i = 0; i < lines.length; i++) {
+    if (/^## v/.test(lines[i])) {
+      if (start === -1) {
+        start = i;
+      } else {
+        end = i;
+        break;
+      }
+    }
+  }
+
+  if (start === -1) return null;
+
+  const heading = lines[start].replace(/^## /, "");
+  const body = lines.slice(start + 1, end).join("\n").trim();
   return {
-    heading: match[1],
-    version: match[1].replace(/^v/, ""),
-    body: match[2].trim(),
+    heading,
+    version: heading.replace(/^v/, ""),
+    body,
   };
 }
 
