@@ -1,0 +1,10 @@
+version: 1
+updated: "2026-05-14"
+skills:
+  - name: documentation
+    description: "Write clear, well-structured technical documentation. Use when writing README, API docs, architecture docs, or any technical documentation."
+    license: MIT
+    hasScripts: false
+    metadata:
+      author: moflow
+      version: "1.0"

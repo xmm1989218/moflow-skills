@@ -1,0 +1,12 @@
+{
+  "name": "moflow-skills",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "node scripts/lint.mjs"
+  },
+  "devDependencies": {
+    "js-yaml": "^4.1.0",
+    "gray-matter": "^4.0.3"
+  }
+}
