@@ -1,5 +1,5 @@
-version: "2026.5.14.2"
-updated: "2026-05-14"
+version: "2026.5.14.3"
+updated: "2026-05-13"
 skills:
   - name: documentation
     description: "Write clear, well-structured technical documentation. Use when writing README, API docs, architecture docs, or any technical documentation."
