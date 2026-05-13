@@ -35,12 +35,13 @@ This script will:
 - Insert a new entry at the top of CHANGELOG.md
 - Update registry.yaml version and updated date
 
-### 2. Review the generated CHANGELOG.md entry
+### 2. Review and complete the CHANGELOG.md entry
 
-The script generates the entry using commit messages. Review and adjust if needed:
+The script auto-generates the entry. You need to review and complete it:
 
-- Verify skill change types (new/updated/removed) are correct
-- Edit commit descriptions for clarity if needed
+- **New skills**: The script pulls the description from registry.yaml automatically. Verify it reads well.
+- **Updated skills**: The script inserts a `TODO: describe what changed` placeholder. **You must replace it** with a brief description of what changed (e.g. `added API docs section`, `fixed typo in README section`). Refer to the commit messages listed below for context.
+- **Removed skills**: No additional text needed, but verify correctness.
 - Ensure version transitions are accurate
 
 ### 3. Validate
@@ -84,9 +85,10 @@ The script automatically calculates the correct version by checking existing tag
 ### Skills
 
 - **documentation** v1.0.0 → v1.1.0 (updated)
+  added API documentation guidelines and fixed typo
   - add API docs section
   - fix typo in README section
-- **translation** v1.0.0 (new)
+- **translation** v1.0.0 (new) — Translate text between languages with context awareness
   - add translation skill
 
 ### Changes
@@ -97,9 +99,10 @@ The script automatically calculates the correct version by checking existing tag
 
 Rules:
 - `### Skills` section lists skill-level changes with version numbers
-- For updated skills: show version transition and list commit messages indented
-- For new skills: show initial version and list commit messages indented
+- For new skills: description from registry.yaml is auto-appended after `—`
+- For updated skills: write a brief human-readable description of what changed (replace the `TODO` placeholder)
 - For removed skills: show last version
+- Commit messages are listed indented below each skill entry as reference
 - `### Changes` section lists all commit messages globally
 
 ## Important Notes

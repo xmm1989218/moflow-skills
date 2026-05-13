@@ -64,15 +64,15 @@ function getSkillChanges(oldRegistry, newRegistry) {
 
   for (const [name, skill] of Object.entries(newSkills)) {
     if (!oldSkills[name]) {
-      changes.push({ name, type: "new", newVersion: skill.version });
+      changes.push({ name, type: "new", newVersion: skill.version, description: skill.description });
     } else if (oldSkills[name].version !== skill.version) {
-      changes.push({ name, type: "updated", oldVersion: oldSkills[name].version, newVersion: skill.version });
+      changes.push({ name, type: "updated", oldVersion: oldSkills[name].version, newVersion: skill.version, description: skill.description });
     }
   }
 
   for (const [name, skill] of Object.entries(oldSkills)) {
     if (!newSkills[name]) {
-      changes.push({ name, type: "removed", oldVersion: skill.version });
+      changes.push({ name, type: "removed", oldVersion: skill.version, description: skill.description });
     }
   }
 
@@ -140,9 +140,10 @@ entry += `### Skills\n\n`;
 
 for (const change of skillChanges) {
   if (change.type === "new") {
-    entry += `- **${change.name}** v${change.newVersion} (new)\n`;
+    entry += `- **${change.name}** v${change.newVersion} (new) — ${change.description}\n`;
   } else if (change.type === "updated") {
     entry += `- **${change.name}** v${change.oldVersion} → v${change.newVersion} (updated)\n`;
+    entry += `  TODO: describe what changed\n`;
   } else if (change.type === "removed") {
     entry += `- **${change.name}** v${change.oldVersion} (removed)\n`;
   }

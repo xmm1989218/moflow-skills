@@ -4,7 +4,7 @@
 
 ### Skills
 
-- **documentation** v1.0.0 (new)
+- **documentation** v1.0.0 (new) — Write clear, well-structured technical documentation. Use when writing README, API docs, architecture docs, or any technical documentation.
 
 ### Changes
 
