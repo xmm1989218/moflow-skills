@@ -70,10 +70,15 @@ console.log(`📌 Release version: ${tagName}`);
 // 5. Update registry.yaml
 const oldVersion = registry.version;
 
-registry.version = newVersion;
-registry.updated = new Date().toISOString().slice(0, 10);
-
-const newRegistryContent = yaml.dump(registry, { lineWidth: -1, quotingType: '"', forceQuotes: false });
+let newRegistryContent = registryContent;
+newRegistryContent = newRegistryContent.replace(
+  /^version:.*$/m,
+  `version: "${newVersion}"`
+);
+newRegistryContent = newRegistryContent.replace(
+  /^updated:.*$/m,
+  `updated: "${new Date().toISOString().slice(0, 10)}"`
+);
 fs.writeFileSync(REGISTRY_PATH, newRegistryContent, "utf-8");
 console.log(`📌 Registry version: ${oldVersion} → ${newVersion}`);
 
@@ -108,7 +113,12 @@ run(`git push origin ${tagName}`);
 console.log("📤 Pushed commit and tag");
 
 // 10. Create GitHub Release (draft)
-const escapedBody = changelog.replace(/"/g, '\\"').replace(/`/g, "\\`").replace(/\$/g, "\\$");
-run(`gh release create ${tagName} --title "${tagName}" --notes "${escapedBody}" --draft`);
+const notesFile = path.join(ROOT, ".release-notes.tmp.md");
+fs.writeFileSync(notesFile, changelog, "utf-8");
+try {
+  run(`gh release create ${tagName} --title "${tagName}" --notes-file "${notesFile}" --draft`);
+} finally {
+  fs.unlinkSync(notesFile);
+}
 console.log(`🎉 Release draft created: ${tagName}`);
 console.log("   Review and publish at: https://github.com/xmm1989218/moflow-skills/releases\n");
