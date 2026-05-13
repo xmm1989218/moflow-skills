@@ -15,7 +15,7 @@ function fail(msg) {
   process.exit(1);
 }
 
-function generateVersion() {
+function generateVersion(existingVersion) {
   const now = new Date();
   const datePart = `${now.getFullYear()}.${now.getMonth() + 1}.${now.getDate()}`;
   const prefix = `v${datePart}.`;
@@ -28,6 +28,13 @@ function generateVersion() {
     }
   } catch {
     // no tags yet
+  }
+
+  if (existingVersion && existingVersion.startsWith(`${datePart}.`)) {
+    const existingSeq = parseInt(existingVersion.split(".").pop(), 10);
+    if (existingSeq >= existingCount + 1) {
+      existingCount = existingSeq;
+    }
   }
 
   const seq = existingCount + 1;
@@ -54,13 +61,13 @@ try {
 console.log("✅ Lint passed\n");
 
 // 4. Generate version
-const newVersion = generateVersion();
+const registryContent = fs.readFileSync(REGISTRY_PATH, "utf-8");
+const registry = yaml.load(registryContent);
+const newVersion = generateVersion(registry.version);
 const tagName = `v${newVersion}`;
 console.log(`📌 Release version: ${tagName}`);
 
 // 5. Update registry.yaml
-const registryContent = fs.readFileSync(REGISTRY_PATH, "utf-8");
-const registry = yaml.load(registryContent);
 const oldVersion = registry.version;
 
 registry.version = newVersion;
