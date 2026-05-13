@@ -5,6 +5,7 @@ import yaml from "js-yaml";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
 const REGISTRY_PATH = path.join(ROOT, "registry.yaml");
+const CHANGELOG_PATH = path.join(ROOT, "CHANGELOG.md");
 
 function run(cmd, silent) {
   return execSync(cmd, { encoding: "utf-8", cwd: ROOT, stdio: silent ? ["pipe", "pipe", "pipe"] : "pipe" }).trim();
@@ -15,30 +16,14 @@ function fail(msg) {
   process.exit(1);
 }
 
-function generateVersion(existingVersion) {
-  const now = new Date();
-  const datePart = `${now.getFullYear()}.${now.getMonth() + 1}.${now.getDate()}`;
-  const prefix = `v${datePart}.`;
-
-  let existingCount = 0;
-  try {
-    const tags = run("git tag -l").split("\n").filter(Boolean);
-    for (const tag of tags) {
-      if (tag.startsWith(prefix)) existingCount++;
-    }
-  } catch {
-    // no tags yet
-  }
-
-  if (existingVersion && existingVersion.startsWith(`${datePart}.`)) {
-    const existingSeq = parseInt(existingVersion.split(".").pop(), 10);
-    if (existingSeq >= existingCount + 1) {
-      existingCount = existingSeq;
-    }
-  }
-
-  const seq = existingCount + 1;
-  return `${datePart}.${seq}`;
+function getLatestChangelogEntry(content) {
+  const match = content.match(/^## (v[^\n]+)\n([\s\S]*?)(?=\n## v|\n*$)/);
+  if (!match) return null;
+  return {
+    heading: match[1],
+    version: match[1].replace(/^v/, ""),
+    body: match[2].trim(),
+  };
 }
 
 console.log("\n🚀 moflow-skills release\n");
@@ -60,61 +45,60 @@ try {
 }
 console.log("✅ Lint passed\n");
 
-// 4. Generate version
-const registryContent = fs.readFileSync(REGISTRY_PATH, "utf-8");
-const registry = yaml.load(registryContent);
-const newVersion = generateVersion(registry.version);
-const tagName = `v${newVersion}`;
-console.log(`📌 Release version: ${tagName}`);
-
-// 5. Update registry.yaml
-const oldVersion = registry.version;
-
-let newRegistryContent = registryContent;
-newRegistryContent = newRegistryContent.replace(
-  /^version:.*$/m,
-  `version: "${newVersion}"`
-);
-newRegistryContent = newRegistryContent.replace(
-  /^updated:.*$/m,
-  `updated: "${new Date().toISOString().slice(0, 10)}"`
-);
-fs.writeFileSync(REGISTRY_PATH, newRegistryContent, "utf-8");
-console.log(`📌 Registry version: ${oldVersion} → ${newVersion}`);
-
-// 6. Generate changelog
-let changelog = `## v${newVersion}\n\n`;
-try {
-  const lastTag = run("git describe --tags --abbrev=0 HEAD", true);
-  const log = run(`git log ${lastTag}..HEAD --pretty=format:"- %s" -- skills/`);
-  if (log) {
-    changelog += "### Changes\n\n" + log + "\n";
-  } else {
-    changelog += "No skill changes in this release.\n";
-  }
-} catch {
-  changelog += "### Changes\n\nInitial release.\n";
+// 4. Read version from CHANGELOG.md
+if (!fs.existsSync(CHANGELOG_PATH)) {
+  fail("CHANGELOG.md not found");
+}
+const changelogContent = fs.readFileSync(CHANGELOG_PATH, "utf-8");
+const entry = getLatestChangelogEntry(changelogContent);
+if (!entry) {
+  fail("no version entry found in CHANGELOG.md (expected ## vYYYY.M.D.N)");
 }
 
-console.log(`📝 Changelog:\n${changelog}`);
+const newVersion = entry.version;
+const tagName = `v${newVersion}`;
+console.log(`📌 Release version: ${tagName} (from CHANGELOG.md)`);
 
-// 7. Commit
-run("git add registry.yaml");
-run(`git commit -m "release: v${newVersion}"`);
-console.log(`\n✅ Committed: release: v${newVersion}`);
+// 5. Validate registry.yaml version matches CHANGELOG
+const registryContent = fs.readFileSync(REGISTRY_PATH, "utf-8");
+const registry = yaml.load(registryContent);
+if (registry.version !== newVersion) {
+  fail(`version mismatch: registry.yaml has "${registry.version}", CHANGELOG.md has "${newVersion}". Update registry.yaml first.`);
+}
+console.log(`✅ Registry version matches: ${newVersion}`);
 
-// 8. Tag
+// 6. Check tag doesn't already exist
+try {
+  run(`git rev-parse ${tagName}`, true);
+  fail(`tag ${tagName} already exists`);
+} catch {
+  // tag doesn't exist, good
+}
+
+// 7. Build release notes from CHANGELOG entry
+const releaseNotes = `## ${entry.heading}\n\n${entry.body}`;
+const notesFile = path.join(ROOT, ".release-notes.tmp.md");
+fs.writeFileSync(notesFile, releaseNotes, "utf-8");
+
+// 8. Commit (if there are staged changes)
+run("git add registry.yaml CHANGELOG.md");
+try {
+  run(`git commit -m "release: v${newVersion}"`, true);
+  console.log(`\n✅ Committed: release: v${newVersion}`);
+} catch {
+  console.log("\n  (nothing new to commit)");
+}
+
+// 9. Tag
 run(`git tag ${tagName}`);
 console.log(`🏷️  Tagged: ${tagName}`);
 
-// 9. Push
+// 10. Push
 run("git push origin master");
 run(`git push origin ${tagName}`);
 console.log("📤 Pushed commit and tag");
 
-// 10. Create GitHub Release (draft)
-const notesFile = path.join(ROOT, ".release-notes.tmp.md");
-fs.writeFileSync(notesFile, changelog, "utf-8");
+// 11. Create GitHub Release (draft)
 try {
   run(`gh release create ${tagName} --title "${tagName}" --notes-file "${notesFile}" --draft`);
 } finally {

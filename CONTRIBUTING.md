@@ -129,7 +129,10 @@ Lint also detects version drift: skill content changed but version not updated �
 
 ## Release
 
-After PRs are merged to master, run:
+After PRs are merged to master:
+
+1. **Generate changelog** — Use the `generate-changelog` skill (`.agents/skills/`) to update CHANGELOG.md and registry.yaml
+2. **Run release script**:
 
 ```bash
 bun run release
@@ -138,10 +141,12 @@ bun run release
 This script:
 
 1. Validates lint passes
-2. Generates date-based version (e.g. `2026.5.14.1`, same-day releases increment the sequence number)
-3. Generates changelog from git log
+2. Reads version from CHANGELOG.md
+3. Validates registry.yaml version matches CHANGELOG.md
 4. Commits, tags, pushes
-5. Creates GitHub Release as draft with changelog
+5. Creates GitHub Release as draft (notes from CHANGELOG.md)
+
+3. **Publish** — Review and publish the draft release on GitHub
 
 MoFlow consumes releases via GitHub API (`/releases/latest`) and downloads skill files at the corresponding tag.
 

@@ -1,9 +1,9 @@
 ---
 name: create-skill
 description: Scaffold a new skill for the moflow-skills repo. Creates the skill directory with SKILL.md, updates registry.yaml, and runs lint to validate.
+version: "1.0.0"
 metadata:
   author: moflow
-  version: "1.0"
 ---
 
 ## What I Do

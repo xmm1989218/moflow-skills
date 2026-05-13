@@ -27,16 +27,19 @@ moflow-skills is the remote skill repository for [MoFlow](https://github.com/xmm
 .agents/skills/          # Development-only skills (for coding agents, not distributed)
   create-skill/          # Meta-skill: helps agents scaffold new skills
     SKILL.md
+  generate-changelog/    # Meta-skill: helps agents generate changelog entries
+    SKILL.md
 .github/workflows/
   lint.yml               # CI: run lint on PR/push to master
 scripts/
   lint.mjs               # Lint script (8 validation checks + version drift detection)
-  release.mjs            # Release script (bump, tag, GitHub Release)
+  release.mjs            # Release script (read CHANGELOG.md, tag, GitHub Release)
 skills/                  # Distributable skills (registered in registry.yaml)
   documentation/
     SKILL.md
     scripts/             # Optional: executable scripts (.py, .js, .sh)
 AGENTS.md                # This file
+CHANGELOG.md             # Version history
 CONTRIBUTING.md          # Contribution guide
 README.md                # Repository overview
 registry.yaml            # Skill index (only skills/ entries, NOT .agents/skills/)
@@ -60,7 +63,7 @@ The lint script (`bun run lint`) enforces these checks:
 
 Additional checks:
 - Script files must have `.py`, `.js`, or `.sh` extensions
-- registry.yaml must have a valid `version` field (auto-incremented integer)
+- registry.yaml must have a valid `version` field (date-based: YYYY.M.D.N)
 - No duplicate skill names in registry.yaml
 - Version drift detection: if skill content changed but version not updated → error (requires git history)
 
@@ -166,13 +169,20 @@ Or use the `create-skill` meta-skill from `.agents/skills/` if available.
 ## Release Flow
 
 1. Merge PR(s) to master
-2. Run `bun run release`
+2. Use the `generate-changelog` meta-skill from `.agents/skills/` to:
+   - Analyze git changes since the last tag
+   - Update CHANGELOG.md with new version entry
+   - Update registry.yaml with new version and date
+   - Run `bun run lint` to validate
+   - Commit and push
+3. Run `bun run release`
    - Validates lint passes
-   - Bumps `registry.yaml` version (auto-increment)
-   - Generates changelog from git log (compared to last tag)
+   - Reads version from CHANGELOG.md
+   - Validates registry.yaml version matches CHANGELOG.md
    - Commits, tags, pushes
-   - Creates GitHub Release with changelog
-3. MoFlow consumes via GitHub API:
+   - Creates GitHub Release as draft (notes from CHANGELOG.md)
+4. Review and publish the draft release on GitHub
+5. MoFlow consumes via GitHub API:
    - `GET /releases/latest` → get tag
    - Read `registry.yaml` at that tag → discover skills
    - Download skill files from that tag → install locally
