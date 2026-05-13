@@ -83,5 +83,6 @@ console.log("📤 Pushed commit and tag");
 const delimiter = "CHANGELOG_" + Math.random().toString(36).slice(2);
 process.env.RELEASE_BODY = "";
 const escapedBody = changelog.replace(/"/g, '\\"').replace(/`/g, "\\`").replace(/\$/g, "\\$");
-run(`gh release create ${tagName} --title "${tagName}" --notes "${escapedBody}"`);
-console.log(`🎉 Released: ${tagName}\n`);
+run(`gh release create ${tagName} --title "${tagName}" --notes "${escapedBody}" --draft`);
+console.log(`🎉 Release draft created: ${tagName}`);
+console.log("   Review and publish at: https://github.com/xmm1989218/moflow-skills/releases\n");
