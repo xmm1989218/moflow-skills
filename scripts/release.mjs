@@ -17,7 +17,7 @@ function fail(msg) {
 }
 
 function getLatestChangelogEntry(content) {
-  const match = content.match(/^## (v[^\n]+)\n([\s\S]*?)(?=\n## v|\n*$)/);
+  const match = content.match(/^## (v[^\n]+)\n([\s\S]*?)(?=\n## v|\n*$)/m);
   if (!match) return null;
   return {
     heading: match[1],
