@@ -6,8 +6,8 @@ import yaml from "js-yaml";
 const ROOT = path.resolve(import.meta.dirname, "..");
 const REGISTRY_PATH = path.join(ROOT, "registry.yaml");
 
-function run(cmd) {
-  return execSync(cmd, { encoding: "utf-8", cwd: ROOT }).trim();
+function run(cmd, silent) {
+  return execSync(cmd, { encoding: "utf-8", cwd: ROOT, stdio: silent ? ["pipe", "pipe", "pipe"] : "pipe" }).trim();
 }
 
 function fail(msg) {
@@ -85,7 +85,7 @@ console.log(`📌 Registry version: ${oldVersion} → ${newVersion}`);
 // 6. Generate changelog
 let changelog = `## v${newVersion}\n\n`;
 try {
-  const lastTag = run("git describe --tags --abbrev=0 HEAD");
+  const lastTag = run("git describe --tags --abbrev=0 HEAD", true);
   const log = run(`git log ${lastTag}..HEAD --pretty=format:"- %s" -- skills/`);
   if (log) {
     changelog += "### Changes\n\n" + log + "\n";
