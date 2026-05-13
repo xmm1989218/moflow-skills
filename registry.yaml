@@ -1,9 +1,9 @@
-version: 2
-updated: "2026-05-13"
+version: "2026.5.14.1"
+updated: "2026-05-14"
 skills:
   - name: documentation
-    description: Write clear, well-structured technical documentation. Use when writing README, API docs, architecture docs, or any technical documentation.
-    version: 1.0.0
+    description: "Write clear, well-structured technical documentation. Use when writing README, API docs, architecture docs, or any technical documentation."
+    version: "1.0.0"
     license: MIT
     hasScripts: false
     metadata:

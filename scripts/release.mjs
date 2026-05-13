@@ -15,6 +15,25 @@ function fail(msg) {
   process.exit(1);
 }
 
+function generateVersion() {
+  const now = new Date();
+  const datePart = `${now.getFullYear()}.${now.getMonth() + 1}.${now.getDate()}`;
+  const prefix = `v${datePart}.`;
+
+  let existingCount = 0;
+  try {
+    const tags = run("git tag -l").split("\n").filter(Boolean);
+    for (const tag of tags) {
+      if (tag.startsWith(prefix)) existingCount++;
+    }
+  } catch {
+    // no tags yet
+  }
+
+  const seq = existingCount + 1;
+  return `${datePart}.${seq}`;
+}
+
 console.log("\n🚀 moflow-skills release\n");
 
 // 1. Check branch
@@ -34,21 +53,24 @@ try {
 }
 console.log("✅ Lint passed\n");
 
-// 4. Bump registry version + update date
+// 4. Generate version
+const newVersion = generateVersion();
+const tagName = `v${newVersion}`;
+console.log(`📌 Release version: ${tagName}`);
+
+// 5. Update registry.yaml
 const registryContent = fs.readFileSync(REGISTRY_PATH, "utf-8");
 const registry = yaml.load(registryContent);
 const oldVersion = registry.version;
-const newVersion = oldVersion + 1;
-const today = new Date().toISOString().slice(0, 10);
 
 registry.version = newVersion;
-registry.updated = today;
+registry.updated = new Date().toISOString().slice(0, 10);
 
 const newRegistryContent = yaml.dump(registry, { lineWidth: -1, quotingType: '"', forceQuotes: false });
 fs.writeFileSync(REGISTRY_PATH, newRegistryContent, "utf-8");
 console.log(`📌 Registry version: ${oldVersion} → ${newVersion}`);
 
-// 5. Generate changelog
+// 6. Generate changelog
 let changelog = `## v${newVersion}\n\n`;
 try {
   const lastTag = run("git describe --tags --abbrev=0 HEAD");
@@ -64,24 +86,21 @@ try {
 
 console.log(`📝 Changelog:\n${changelog}`);
 
-// 6. Commit
+// 7. Commit
 run("git add registry.yaml");
 run(`git commit -m "release: v${newVersion}"`);
 console.log(`\n✅ Committed: release: v${newVersion}`);
 
-// 7. Tag
-const tagName = `v${newVersion}`;
+// 8. Tag
 run(`git tag ${tagName}`);
 console.log(`🏷️  Tagged: ${tagName}`);
 
-// 8. Push
+// 9. Push
 run("git push origin master");
 run(`git push origin ${tagName}`);
 console.log("📤 Pushed commit and tag");
 
-// 9. Create GitHub Release
-const delimiter = "CHANGELOG_" + Math.random().toString(36).slice(2);
-process.env.RELEASE_BODY = "";
+// 10. Create GitHub Release (draft)
 const escapedBody = changelog.replace(/"/g, '\\"').replace(/`/g, "\\`").replace(/\$/g, "\\$");
 run(`gh release create ${tagName} --title "${tagName}" --notes "${escapedBody}" --draft`);
 console.log(`🎉 Release draft created: ${tagName}`);

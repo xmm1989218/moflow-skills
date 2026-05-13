@@ -10,6 +10,7 @@ const REGISTRY_PATH = path.join(ROOT, "registry.yaml");
 
 const NAME_REGEX = /^[a-z][a-z0-9]*(-[a-z0-9]+)*$/;
 const SEMVER_REGEX = /^\d+\.\d+\.\d+$/;
+const REGISTRY_VERSION_REGEX = /^\d{4}\.\d{1,2}\.\d{1,2}\.\d+$/;
 const MAX_NAME_LENGTH = 64;
 const MAX_DESCRIPTION_LENGTH = 1024;
 
@@ -156,8 +157,8 @@ function validateRegistry() {
     return { names: [], entries: [] };
   }
 
-  if (typeof data.version !== "number") {
-    error("registry.yaml", "missing or invalid version");
+  if (typeof data.version !== "string" || !REGISTRY_VERSION_REGEX.test(data.version)) {
+    error("registry.yaml", "missing or invalid version (expected format: YYYY.M.D.N)");
   }
 
   if (!Array.isArray(data.skills)) {

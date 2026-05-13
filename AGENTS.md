@@ -126,7 +126,7 @@ The body is injected into the AI's context when the skill is activated. Structur
 ## registry.yaml Format
 
 ```yaml
-version: 1                      # Auto-incremented integer, bumped on each release
+version: "2026.5.14.1"           # Date-based: YYYY.M.D.N (N = daily sequence)
 updated: "YYYY-MM-DD"           # Last release date
 skills:
   - name: <name>
@@ -138,7 +138,8 @@ skills:
       author: moflow
 ```
 
-- `version` must match the skill's SKILL.md version
+- Registry `version` uses date-based format: `YYYY.M.D.N` (e.g. `2026.5.14.1`, `2026.5.14.2` for same-day releases)
+- Skill `version` must match the skill's SKILL.md version
 - `hasScripts` must be `true` if the skill has a `scripts/` directory with files
 - `updated` is set by the release script
 
