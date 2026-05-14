@@ -155,18 +155,45 @@ skills:
 
 Skills in `.agents/skills/` are NOT distributed to moflow users. They exist only to help coding agents work with this repository.
 
+## Git Workflow
+
+**All skill changes must go through a branch and merge request. Never commit directly to master.**
+
+### Creating or updating a skill
+
+1. Create a branch from master: `git checkout -b skill/<name>` (new) or `git checkout -b update/<name>` (update)
+2. Make changes (SKILL.md, registry.yaml, scripts/, etc.)
+3. Run `bun run lint` and fix any errors
+4. Commit and push the branch
+5. Create a merge request against master
+
+### Branch naming
+
+| Type | Format | Example |
+|------|--------|---------|
+| New skill | `skill/<name>` | `skill/translation` |
+| Update skill | `update/<name>` | `update/documentation` |
+| Fix | `fix/<name>` | `fix/documentation` |
+
+### Release
+
+After PRs are merged to master, the release flow runs directly on master (see Release Flow section).
+
 ## Adding a New Skill
 
-1. Create `skills/<name>/SKILL.md` with valid frontmatter (including `version`) and body
-2. Add entry to `registry.yaml` under `skills:` (including matching `version`)
-3. Run `bun run lint`
-4. Fix any errors
-5. Commit and push
-6. Open a pull request
+1. Create a branch: `git checkout -b skill/<name>`
+2. Create `skills/<name>/SKILL.md` with valid frontmatter (including `version`) and body
+3. Add entry to `registry.yaml` under `skills:` (including matching `version`)
+4. Run `bun run lint`
+5. Fix any errors
+6. Commit and push
+7. Create a merge request against master
 
 Or use the `create-skill` meta-skill from `.agents/skills/` if available.
 
 ## Release Flow
+
+**Release runs directly on master after PRs are merged.**
 
 1. Merge PR(s) to master
 2. Use the `generate-changelog` meta-skill from `.agents/skills/` to:

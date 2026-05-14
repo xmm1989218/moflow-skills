@@ -18,7 +18,7 @@ I prepare a release by generating a changelog entry. I handle:
 
 ## When to Use Me
 
-Use me when preparing for a release, **before** running `bun run release`. After PRs are merged to master, activate this skill to generate the changelog entry.
+Use me when preparing for a release, **before** running `bun run release`. After PRs are merged to master, activate this skill to generate the changelog entry. **This skill runs directly on the master branch.**
 
 ## Instructions
 
@@ -59,6 +59,8 @@ git add CHANGELOG.md registry.yaml
 git commit -m "chore: update changelog for v<VERSION>"
 git push
 ```
+
+Note: This runs directly on master (no branch needed for release preparation).
 
 ### 5. Release
 

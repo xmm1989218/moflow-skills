@@ -98,17 +98,32 @@ Fix any errors before committing.
 
 ### 6. Submit
 
-Commit your changes and open a pull request against the `master` branch.
+Commit your changes, push, and create a merge request against the `master` branch.
+
+**Branch naming**:
+
+| Type | Format | Example |
+|------|--------|---------|
+| New skill | `skill/<name>` | `skill/translation` |
+| Update skill | `update/<name>` | `update/documentation` |
+| Fix | `fix/<name>` | `fix/documentation` |
+
+**Never commit directly to master.** Always use a branch and merge request.
 
 ## Modifying an Existing Skill
 
-When modifying skill content (SKILL.md body, scripts/), you **must** update the `version` field:
+1. Create a branch: `git checkout -b update/<name>`
+2. Bump `version` in both `SKILL.md` and `registry.yaml` — they must match
+3. Make your changes (SKILL.md body, scripts/, etc.)
+4. Run `bun run lint`
+5. Fix any errors
+6. Commit, push, and create a merge request
+
+Version bump rules:
 
 - **Patch** `1.0.0` → `1.0.1`: typo fixes, minor tweaks
 - **Minor** `1.0.0` → `1.1.0`: new content, feature enhancements
 - **Major** `1.0.0` → `2.0.0`: breaking changes
-
-Update `version` in **both** `SKILL.md` and `registry.yaml` — they must match.
 
 Lint will detect content changes without a version bump (version drift).
 

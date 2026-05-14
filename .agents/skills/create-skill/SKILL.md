@@ -109,11 +109,24 @@ When asked to create a new skill, follow these steps:
 
 1. **Ask for name and description** if not provided
 2. **Validate name** against naming rules
-3. **Create directory** `skills/<name>/`
-4. **Write SKILL.md** with proper frontmatter (including `version: "1.0.0"`) and body
-5. **Update registry.yaml** — add the new skill entry to the `skills` list (including matching `version`)
-6. **Run lint** — execute `bun run lint` and fix any errors
-7. **Confirm** — report what was created and the lint result
+3. **Create branch** from master: `git checkout -b skill/<name>`
+4. **Create directory** `skills/<name>/`
+5. **Write SKILL.md** with proper frontmatter (including `version: "1.0.0"`) and body
+6. **Update registry.yaml** — add the new skill entry to the `skills` list (including matching `version`)
+7. **Run lint** — execute `bun run lint` and fix any errors
+8. **Commit and push** the branch
+9. **Create merge request** against master
+
+## Updating an Existing Skill
+
+When asked to update an existing skill, follow these steps:
+
+1. **Create branch** from master: `git checkout -b update/<name>`
+2. **Bump version** in both `skills/<name>/SKILL.md` and `registry.yaml` (see Version Rules)
+3. **Make changes** to SKILL.md body, scripts/, etc.
+4. **Run lint** — execute `bun run lint` and fix any errors
+5. **Commit and push** the branch
+6. **Create merge request** against master
 
 ## Version Rules
 
@@ -130,3 +143,4 @@ When asked to create a new skill, follow these steps:
 - Do NOT register this skill (create-skill) in registry.yaml — it lives in `.agents/skills/`, not `skills/`
 - Only skills under `skills/` should be registered in registry.yaml
 - Skills under `.agents/skills/` are development aids for coding agents, not distributable skills for moflow users
+- **Never commit directly to master** — always create a branch (`skill/<name>` for new skills, `update/<name>` for updates) and open a merge request
