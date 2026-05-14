@@ -148,7 +148,13 @@ Inline: `$x^2 + y^2 = r^2$`
 
 ## Conversion Script
 
-After writing your Marp Markdown file, convert it using the provided script:
+Dependencies are managed via `package.json`. Install them first:
+
+```bash
+cd scripts && bun install
+```
+
+Then convert your Marp Markdown file:
 
 ```bash
 node scripts/convert.js input.md --html
@@ -156,15 +162,13 @@ node scripts/convert.js input.md --pdf
 node scripts/convert.js input.md --html --pdf
 ```
 
-The script uses `npx @marp-team/marp-cli` — no global installation required. Works on Windows, macOS, and Linux.
-
 Output files are placed alongside the input file:
 - `input.html` for `--html`
 - `input.pdf` for `--pdf`
 
 ### PDF requirements
 
-PDF output requires either Chromium/Chrome or the `puppeteer` npm package. The script will attempt to use the system browser first, falling back to `puppeteer` via `npx`.
+PDF output requires either Chromium/Chrome or the `puppeteer` npm package.
 
 ## Example Presentation
 

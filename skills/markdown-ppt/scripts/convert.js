@@ -55,19 +55,24 @@ if (!html && !pdf) {
 
 const inputDir = dirname(inputPath);
 const inputBase = basename(inputPath, ".md");
-const marpCmd = "npx @marp-team/marp-cli";
+const marpCli = resolve(import.meta.dirname, "node_modules/.bin/marp");
+
+if (!existsSync(marpCli)) {
+  console.error("Error: dependencies not installed. Run: bun install");
+  process.exit(1);
+}
 
 if (html) {
   const outputPath = join(inputDir, `${inputBase}.html`);
   console.log("Converting to HTML...");
-  execSync(`${marpCmd} --html "${inputPath}" -o "${outputPath}"`, { stdio: "inherit" });
+  execSync(`"${marpCli}" --html "${inputPath}" -o "${outputPath}"`, { stdio: "inherit" });
   console.log(`✅ Created: ${outputPath}`);
 }
 
 if (pdf) {
   const outputPath = join(inputDir, `${inputBase}.pdf`);
   console.log("Converting to PDF...");
-  execSync(`${marpCmd} --pdf "${inputPath}" -o "${outputPath}" --allow-local-files`, { stdio: "inherit" });
+  execSync(`"${marpCli}" --pdf "${inputPath}" -o "${outputPath}" --allow-local-files`, { stdio: "inherit" });
   console.log(`✅ Created: ${outputPath}`);
 }
 

@@ -82,26 +82,30 @@ skills:
     version: "1.0.0"
     license: MIT
     hasScripts: false
+    hasDeps: false
     metadata:
       author: moflow
 ```
 
-Set `hasScripts: true` only if the skill includes a `scripts/` subdirectory.
+Set `hasScripts: true` if the skill has a `scripts/` directory with files.
+Set `hasDeps: true` if the scripts have external dependencies (package.json with deps).
 
 ## Skill with Scripts
 
 If the skill needs executable scripts:
 
 1. Create `skills/<name>/scripts/` directory
-2. Place scripts with appropriate extensions: `.py`, `.js`, or `.sh`
-3. Set `hasScripts: true` in registry.yaml
+2. Create `scripts/package.json` with `name` and `version` fields, and declare dependencies
+3. Place `.js` script files in `scripts/`
+4. Run `bun install` in the `scripts/` directory to generate `bun.lockb`
+5. Set `hasScripts: true` and `hasDeps: true` in registry.yaml
 
 Script execution is handled by moflow's Rust backend:
-- `.py` → python3
-- `.js` → node
-- `.sh` → bash
+- Only `.js` scripts are supported
+- Scripts run via node/bun
 - 30s timeout, max 30KB output
 - Scripts must be under the skills/ directory (path security check)
+- Dependencies in `node_modules/` are resolved from the `scripts/` directory
 
 ## Workflow
 

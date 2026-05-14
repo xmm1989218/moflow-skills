@@ -60,9 +60,12 @@ The lint script (`bun run lint`) enforces these checks:
 | 6 | Directories under `skills/` must be registered in registry.yaml | error |
 | 7 | `version` must match semver format `x.y.z` | error |
 | 8 | `version` in SKILL.md and registry.yaml must be consistent | error |
+| 9 | `hasScripts: true` requires `package.json` in scripts/ | error |
+| 10 | `package.json` in scripts/ requires `bun.lockb` | error |
+| 11 | `package.json` must have `name` and `version` fields | error |
 
 Additional checks:
-- Script files must have `.py`, `.js`, or `.sh` extensions
+- Script files must have `.js` extension
 - registry.yaml must have a valid `version` field (date-based: YYYY.M.D.N)
 - No duplicate skill names in registry.yaml
 - Version drift detection: if skill content changed but version not updated → error (requires git history)
@@ -75,7 +78,9 @@ Additional checks:
 skills/<name>/
   SKILL.md               # Required: frontmatter + body
   scripts/               # Optional: executable scripts
-    helper.py
+    package.json         # Required if scripts/ exists
+    bun.lockb            # Required if package.json exists
+    helper.js            # Script files (.js only)
 ```
 
 ### SKILL.md frontmatter
@@ -137,6 +142,7 @@ skills:
     version: "1.0.0"            # Same as SKILL.md version
     license: MIT
     hasScripts: false
+    hasDeps: false               # true if scripts/ has dependencies (package.json with deps)
     metadata:
       author: moflow
 ```

@@ -127,11 +127,35 @@ function validateSkillDir(name, registrySkill) {
   const hasScripts = fs.existsSync(scriptsDir) && fs.readdirSync(scriptsDir).length > 0;
   if (hasScripts) {
     const scripts = fs.readdirSync(scriptsDir);
-    const validExts = [".py", ".js", ".sh"];
+    const validExts = [".js"];
+    const ignoredFiles = ["package.json", "bun.lock", "bun.lockb"];
     for (const script of scripts) {
+      if (ignoredFiles.includes(script) || script === "node_modules") continue;
       const ext = path.extname(script);
       if (!validExts.includes(ext)) {
-        error(name, `script "${script}" has unsupported extension (allowed: ${validExts.join(", ")})`);
+        error(name, `script "${script}" has unsupported extension (allowed: .js)`);
+      }
+    }
+
+    // Check 9: hasScripts:true requires package.json
+    const pkgPath = path.join(scriptsDir, "package.json");
+    if (!fs.existsSync(pkgPath)) {
+      error(name, "hasScripts is true but scripts/ has no package.json");
+    } else {
+      // Check 11: package.json must have name and version
+      try {
+        const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf-8"));
+        if (!pkg.name) error(name, "scripts/package.json missing name field");
+        if (!pkg.version) error(name, "scripts/package.json missing version field");
+      } catch (e) {
+        error(name, `scripts/package.json parse error: ${e.message}`);
+      }
+
+      // Check 10: package.json requires bun.lock or bun.lockb
+      const lockPath = path.join(scriptsDir, "bun.lock");
+      const lockbPath = path.join(scriptsDir, "bun.lockb");
+      if (!fs.existsSync(lockPath) && !fs.existsSync(lockbPath)) {
+        error(name, "scripts/ has package.json but no bun.lock/bun.lockb (run bun install in scripts/)");
       }
     }
   }

@@ -13,5 +13,6 @@ skills:
     version: "1.0.0"
     license: MIT
     hasScripts: true
+    hasDeps: true
     metadata:
       author: moflow
