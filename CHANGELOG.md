@@ -1,5 +1,16 @@
 # Changelog
 
+## v2026.5.15.2
+
+### Skills
+
+- **markdown-ppt** v1.1.1 → v1.2.0 (updated)
+  fix cross-platform script execution using bunx instead of direct bin path
+
+### Changes
+
+- fix: convert.js use bunx for cross-platform CLI resolution
+
 ## v2026.5.15.1
 
 ### Skills

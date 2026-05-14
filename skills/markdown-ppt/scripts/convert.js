@@ -5,7 +5,7 @@ import { existsSync } from "node:fs";
 const args = process.argv.slice(2);
 
 if (args.length < 2) {
-  console.log("Usage: node convert.js <input.md> [--html] [--pdf]");
+  console.log("Usage: bun convert.js <input.md> [--html] [--pdf]");
   console.log("");
   console.log("Converts a Marp Markdown file to presentation format.");
   console.log("At least one output format (--html or --pdf) must be specified.");
@@ -15,7 +15,7 @@ if (args.length < 2) {
   console.log("  --pdf     Generate PDF presentation");
   console.log("");
   console.log("Output files are placed alongside the input file.");
-  console.log("Example: node convert.js slides.md --html --pdf");
+  console.log("Example: bun convert.js slides.md --html --pdf");
   console.log("  → slides.html + slides.pdf");
   process.exit(1);
 }
@@ -55,24 +55,18 @@ if (!html && !pdf) {
 
 const inputDir = dirname(inputPath);
 const inputBase = basename(inputPath, ".md");
-const marpCli = resolve(import.meta.dirname, "node_modules/.bin/marp");
-
-if (!existsSync(marpCli)) {
-  console.error("Error: dependencies not installed. Run: bun install");
-  process.exit(1);
-}
 
 if (html) {
   const outputPath = join(inputDir, `${inputBase}.html`);
   console.log("Converting to HTML...");
-  execSync(`"${marpCli}" --html "${inputPath}" -o "${outputPath}"`, { stdio: "inherit" });
+  execSync(`bunx @marp-team/marp-cli --html "${inputPath}" -o "${outputPath}"`, { stdio: "inherit" });
   console.log(`✅ Created: ${outputPath}`);
 }
 
 if (pdf) {
   const outputPath = join(inputDir, `${inputBase}.pdf`);
   console.log("Converting to PDF...");
-  execSync(`"${marpCli}" --pdf "${inputPath}" -o "${outputPath}" --allow-local-files`, { stdio: "inherit" });
+  execSync(`bunx @marp-team/marp-cli --pdf "${inputPath}" -o "${outputPath}" --allow-local-files`, { stdio: "inherit" });
   console.log(`✅ Created: ${outputPath}`);
 }
 

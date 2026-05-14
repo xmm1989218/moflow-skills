@@ -1,7 +1,7 @@
 ---
 name: markdown-ppt
 description: "Convert Markdown to HTML/PDF presentations using Marp. Guides writing slide-ready Markdown and provides a conversion script."
-version: "1.1.1"
+version: "1.2.0"
 license: MIT
 metadata:
   author: moflow
