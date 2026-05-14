@@ -1,5 +1,5 @@
-version: "2026.5.14.6"
-updated: "2026-05-14"
+version: "2026.5.15.1"
+updated: "2026-05-15"
 skills:
   - name: documentation
     description: "Write clear, well-structured technical documentation. Use when writing README, API docs, architecture docs, or any technical documentation."
@@ -10,7 +10,7 @@ skills:
       author: moflow
   - name: markdown-ppt
     description: "Convert Markdown to HTML/PDF presentations using Marp. Guides writing slide-ready Markdown and provides a conversion script."
-    version: "1.1.0"
+    version: "1.1.1"
     license: MIT
     hasScripts: true
     hasDeps: true

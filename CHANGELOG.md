@@ -1,5 +1,16 @@
 # Changelog
 
+## v2026.5.15.1
+
+### Skills
+
+- **markdown-ppt** v1.1.0 → v1.1.1 (updated)
+  use bun instead of node for script execution
+
+### Changes
+
+- chore: use bun instead of node for script execution in all skill documentation
+
 ## v2026.5.14.6
 
 ### Skills
