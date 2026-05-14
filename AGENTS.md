@@ -79,8 +79,8 @@ skills/<name>/
   SKILL.md               # Required: frontmatter + body
   scripts/               # Optional: executable scripts
     package.json         # Required if scripts/ exists
-    bun.lockb            # Required if package.json exists
-    helper.js            # Script files (.js only)
+    bun.lock             # Required if package.json exists (commit to git)
+    helper.js            # Script files (.js only, executed via bun)
 ```
 
 ### SKILL.md frontmatter

@@ -157,9 +157,9 @@ cd scripts && bun install
 Then convert your Marp Markdown file:
 
 ```bash
-node scripts/convert.js input.md --html
-node scripts/convert.js input.md --pdf
-node scripts/convert.js input.md --html --pdf
+bun scripts/convert.js input.md --html
+bun scripts/convert.js input.md --pdf
+bun scripts/convert.js input.md --html --pdf
 ```
 
 Output files are placed alongside the input file:

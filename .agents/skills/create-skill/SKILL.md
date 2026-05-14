@@ -102,7 +102,7 @@ If the skill needs executable scripts:
 
 Script execution is handled by moflow's Rust backend:
 - Only `.js` scripts are supported
-- Scripts run via node/bun
+- Scripts run via bun
 - 30s timeout, max 30KB output
 - Scripts must be under the skills/ directory (path security check)
 - Dependencies in `node_modules/` are resolved from the `scripts/` directory
