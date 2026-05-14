@@ -151,12 +151,12 @@ Inline: `$x^2 + y^2 = r^2$`
 After writing your Marp Markdown file, convert it using the provided script:
 
 ```bash
-node scripts/convert.sh input.md --html
-node scripts/convert.sh input.md --pdf
-node scripts/convert.sh input.md --html --pdf
+node scripts/convert.js input.md --html
+node scripts/convert.js input.md --pdf
+node scripts/convert.js input.md --html --pdf
 ```
 
-The script uses `npx @marp-team/marp-cli` — no global installation required.
+The script uses `npx @marp-team/marp-cli` — no global installation required. Works on Windows, macOS, and Linux.
 
 Output files are placed alongside the input file:
 - `input.html` for `--html`
