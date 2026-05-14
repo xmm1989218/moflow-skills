@@ -1,5 +1,17 @@
 # Changelog
 
+## v2026.5.14.6
+
+### Skills
+
+- **markdown-ppt** v1.0.0 → v1.1.0 (updated)
+  add package.json dependency management and convert.js cross-platform support; restrict scripts to .js only
+
+### Changes
+
+- feat: restrict scripts to .js only, add package.json/bun.lock dependency management, add lint checks 9/10/11
+- fix: replace convert.sh with convert.js for cross-platform support
+
 ## v2026.5.14.5
 
 ### Skills
