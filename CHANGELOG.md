@@ -1,5 +1,19 @@
 # Changelog
 
+## v2026.5.14.5
+
+### Skills
+
+- **markdown-ppt** v1.0.0 (new) — Convert Markdown to HTML/PDF presentations using Marp. Guides writing slide-ready Markdown and provides a conversion script.
+  - add Marp syntax guide, writing guidelines, and example presentation
+  - add cross-platform conversion script (convert.js)
+
+### Changes
+
+- fix: replace convert.sh with convert.js for cross-platform support
+- feat: add markdown-ppt skill for Marp presentation generation
+- feat: enforce branch + MR workflow for creating and updating skills
+
 ## v2026.5.14.4
 
 ### Skills
