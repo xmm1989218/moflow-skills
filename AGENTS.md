@@ -63,6 +63,7 @@ The lint script (`bun run lint`) enforces these checks:
 | 9 | `hasScripts: true` requires `package.json` in scripts/ | error |
 | 10 | `package.json` in scripts/ requires `bun.lockb` | error |
 | 11 | `package.json` must have `name` and `version` fields | error |
+| 12 | `.js` scripts must support `--help` | error |
 
 Additional checks:
 - Script files must have `.js` extension

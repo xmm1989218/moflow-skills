@@ -153,6 +153,7 @@ Lint will detect content changes without a version bump (version drift).
 | 9 | `hasScripts: true` requires `package.json` in scripts/ |
 | 10 | `package.json` in scripts/ requires `bun.lockb` |
 | 11 | `package.json` must have `name` and `version` fields |
+| 12 | `.js` scripts must support `--help` |
 
 Lint also detects version drift: skill content changed but version not updated → error.
 

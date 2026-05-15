@@ -1,5 +1,17 @@
 # Changelog
 
+## v2026.5.15.3
+
+### Skills
+
+- **markdown-ppt** v1.2.0 → v1.3.0 (updated)
+  add --help and --output flags to convert.js; enforce --help support in lint
+
+### Changes
+
+- feat: add lint check 12 — .js scripts must support --help
+- feat: add --help and --output flags to convert.js
+
 ## v2026.5.15.2
 
 ### Skills

@@ -158,6 +158,17 @@ function validateSkillDir(name, registrySkill) {
         error(name, "scripts/ has package.json but no bun.lock/bun.lockb (run bun install in scripts/)");
       }
     }
+
+    // Check 12: .js scripts must support --help
+    for (const script of scripts) {
+      if (ignoredFiles.includes(script) || script === "node_modules") continue;
+      if (path.extname(script) !== ".js") continue;
+      const scriptPath = path.join(scriptsDir, script);
+      const content = fs.readFileSync(scriptPath, "utf-8");
+      if (!content.includes("--help")) {
+        error(name, `script "${script}" must support --help`);
+      }
+    }
   }
 }
 

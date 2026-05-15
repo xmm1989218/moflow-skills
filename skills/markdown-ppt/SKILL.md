@@ -1,7 +1,7 @@
 ---
 name: markdown-ppt
 description: "Convert Markdown to HTML/PDF presentations using Marp. Guides writing slide-ready Markdown and provides a conversion script."
-version: "1.2.0"
+version: "1.3.0"
 license: MIT
 metadata:
   author: moflow
@@ -160,11 +160,12 @@ Then convert your Marp Markdown file:
 bun scripts/convert.js input.md --html
 bun scripts/convert.js input.md --pdf
 bun scripts/convert.js input.md --html --pdf
+bun scripts/convert.js input.md --html --output ./presentations/
 ```
 
-Output files are placed alongside the input file:
-- `input.html` for `--html`
-- `input.pdf` for `--pdf`
+Run `bun scripts/convert.js --help` for full usage information.
+
+Output files are placed alongside the input file by default, or in the directory specified by `--output`.
 
 ### PDF requirements
 

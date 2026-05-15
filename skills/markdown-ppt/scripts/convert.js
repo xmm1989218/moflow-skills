@@ -1,36 +1,59 @@
 import { execSync } from "node:child_process";
 import { resolve, dirname, basename, join } from "node:path";
-import { existsSync } from "node:fs";
+import { existsSync, mkdirSync } from "node:fs";
+
+function printHelp() {
+  console.log(`Usage: bun convert.js <input.md> [--html] [--pdf] [--output <dir>] [--help]
+
+Converts a Marp Markdown file to presentation format.
+
+Arguments:
+  input.md            Input Markdown file (Marp format)
+
+Options:
+  --html              Generate HTML presentation
+  --pdf               Generate PDF presentation
+  --output <dir>      Output directory (default: same as input file)
+  --help, -h          Show this help message
+
+At least one output format (--html or --pdf) must be specified.
+
+Examples:
+  bun convert.js slides.md --html
+  bun convert.js slides.md --html --pdf
+  bun convert.js slides.md --html --output ./presentations/
+`);
+  process.exit(0);
+}
 
 const args = process.argv.slice(2);
 
-if (args.length < 2) {
-  console.log("Usage: bun convert.js <input.md> [--html] [--pdf]");
-  console.log("");
-  console.log("Converts a Marp Markdown file to presentation format.");
-  console.log("At least one output format (--html or --pdf) must be specified.");
-  console.log("");
-  console.log("Options:");
-  console.log("  --html    Generate HTML presentation");
-  console.log("  --pdf     Generate PDF presentation");
-  console.log("");
-  console.log("Output files are placed alongside the input file.");
-  console.log("Example: bun convert.js slides.md --html --pdf");
-  console.log("  → slides.html + slides.pdf");
-  process.exit(1);
+if (args.length === 0 || args[0] === "--help" || args[0] === "-h") {
+  printHelp();
 }
 
 let input = "";
 let html = false;
 let pdf = false;
+let outputDir = "";
 
-for (const arg of args) {
+for (let i = 0; i < args.length; i++) {
+  const arg = args[i];
   if (arg === "--html") {
     html = true;
   } else if (arg === "--pdf") {
     pdf = true;
+  } else if (arg === "--output") {
+    outputDir = args[++i];
+    if (!outputDir) {
+      console.error("Error: --output requires a directory path");
+      process.exit(1);
+    }
+  } else if (arg === "--help" || arg === "-h") {
+    printHelp();
   } else if (arg.startsWith("-")) {
     console.error(`Unknown option: ${arg}`);
+    console.error("Run with --help for usage information");
     process.exit(1);
   } else {
     input = arg;
@@ -39,6 +62,7 @@ for (const arg of args) {
 
 if (!input) {
   console.error("Error: no input file specified");
+  console.error("Run with --help for usage information");
   process.exit(1);
 }
 
@@ -50,21 +74,27 @@ if (!existsSync(inputPath)) {
 
 if (!html && !pdf) {
   console.error("Error: specify at least one output format (--html or --pdf)");
+  console.error("Run with --help for usage information");
   process.exit(1);
 }
 
 const inputDir = dirname(inputPath);
 const inputBase = basename(inputPath, ".md");
+const targetDir = outputDir ? resolve(outputDir) : inputDir;
+
+if (outputDir && !existsSync(targetDir)) {
+  mkdirSync(targetDir, { recursive: true });
+}
 
 if (html) {
-  const outputPath = join(inputDir, `${inputBase}.html`);
+  const outputPath = join(targetDir, `${inputBase}.html`);
   console.log("Converting to HTML...");
   execSync(`bunx @marp-team/marp-cli --html "${inputPath}" -o "${outputPath}"`, { stdio: "inherit" });
   console.log(`✅ Created: ${outputPath}`);
 }
 
 if (pdf) {
-  const outputPath = join(inputDir, `${inputBase}.pdf`);
+  const outputPath = join(targetDir, `${inputBase}.pdf`);
   console.log("Converting to PDF...");
   execSync(`bunx @marp-team/marp-cli --pdf "${inputPath}" -o "${outputPath}" --allow-local-files`, { stdio: "inherit" });
   console.log(`✅ Created: ${outputPath}`);
