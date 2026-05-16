@@ -169,11 +169,11 @@ function validateSkillDir(name, registrySkill) {
         error(name, `script "${script}" must support --help`);
         continue;
       }
-      if (!content.includes("run_skill_script")) {
-        error(name, `script "${script}" --help output must use run_skill_script format`);
+      if (!content.includes("runSkillScript")) {
+        error(name, `script "${script}" --help output must use runSkillScript format`);
       }
       if (/Usage:.*bun\s+\S+\.js/i.test(content) || /Usage:.*node\s+\S+\.js/i.test(content)) {
-        error(name, `script "${script}" --help must not use bun/node CLI format, use run_skill_script instead`);
+        error(name, `script "${script}" --help must not use bun/node CLI format, use runSkillScript instead`);
       }
     }
   }

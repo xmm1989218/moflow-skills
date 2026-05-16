@@ -3,7 +3,7 @@ import { resolve, dirname, basename, join } from "node:path";
 import { existsSync, mkdirSync } from "node:fs";
 
 function printHelp() {
-  console.log(`Usage: run_skill_script("convert.js", "<input.md> [--html] [--pdf] [--output <dir>]")
+  console.log(`Usage: runSkillScript("convert.js", "<input.md> [--html] [--pdf] [--output <dir>]")
 
 Arguments:
   <input.md>            Input Markdown file (Marp format)
@@ -15,9 +15,9 @@ Options:
   --help, -h            Show this help message
 
 Examples:
-  run_skill_script("convert.js", "slides.md --html")
-  run_skill_script("convert.js", "slides.md --html --pdf")
-  run_skill_script("convert.js", "slides.md --html --output ./presentations/")
+  runSkillScript("convert.js", "slides.md --html")
+  runSkillScript("convert.js", "slides.md --html --pdf")
+  runSkillScript("convert.js", "slides.md --html --output ./presentations/")
 `);
   process.exit(0);
 }

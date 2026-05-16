@@ -66,9 +66,9 @@ skills/<name>/
     convert.js         # Script files (.js only)
 ```
 
-Only `.js` script files are supported. Scripts are executed via MoFlow's `run_skill_script` tool. Dependencies are managed via `package.json` and installed with `bun install`:
+Only `.js` script files are supported. Scripts are executed via MoFlow's `runSkillScript` tool. Dependencies are managed via `package.json` and installed with `bun install`:
 
-**Script `--help` output must use `run_skill_script` format** (e.g. `Usage: run_skill_script("convert.js", "<args>")`), not `bun` or `node` CLI format. This is enforced by lint.
+**Script `--help` output must use `runSkillScript` format** (e.g. `Usage: runSkillScript("convert.js", "<args>")`), not `bun` or `node` CLI format. This is enforced by lint.
 
 ```bash
 cd skills/<name>/scripts && bun install
@@ -155,7 +155,7 @@ Lint will detect content changes without a version bump (version drift).
 | 9 | `hasScripts: true` requires `package.json` in scripts/ |
 | 10 | `package.json` in scripts/ requires `bun.lockb` |
 | 11 | `package.json` must have `name` and `version` fields |
-| 12 | `.js` scripts must support `--help` with `run_skill_script` format (not `bun`/`node` CLI) |
+| 12 | `.js` scripts must support `--help` with `runSkillScript` format (not `bun`/`node` CLI) |
 
 Lint also detects version drift: skill content changed but version not updated → error.
 

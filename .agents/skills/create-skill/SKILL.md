@@ -100,13 +100,13 @@ If the skill needs executable scripts:
 4. Run `bun install` in the `scripts/` directory to generate `bun.lockb`
 5. Set `hasScripts: true` and `hasDeps: true` in registry.yaml
 
-Script execution is handled by MoFlow's `run_skill_script` tool:
+Script execution is handled by MoFlow's `runSkillScript` tool:
 - Only `.js` scripts are supported
 - Scripts run via bun
 - **Scripts must support `--help` flag** — this is enforced by lint
-- **`--help` output must use `run_skill_script` format** — e.g. `Usage: run_skill_script("convert.js", "<args>")`, NOT `bun convert.js` or `node convert.js`
-- AI agents call `run_skill_script("<script_name>", "<args>")` to execute scripts
-- AI agents call `run_skill_script("<script_name>", "--help")` to view usage information
+- **`--help` output must use `runSkillScript` format** — e.g. `Usage: runSkillScript("convert.js", "<args>")`, NOT `bun convert.js` or `node convert.js`
+- AI agents call `runSkillScript("<script_name>", "<args>")` to execute scripts
+- AI agents call `runSkillScript("<script_name>", "--help")` to view usage information
 - 30s timeout, max 30KB output
 - Scripts must be under the skills/ directory (path security check)
 - Dependencies in `node_modules/` are resolved from the `scripts/` directory
