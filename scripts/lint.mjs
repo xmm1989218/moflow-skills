@@ -159,7 +159,7 @@ function validateSkillDir(name, registrySkill) {
       }
     }
 
-    // Check 12: .js scripts must support --help
+    // Check 12: .js scripts must support --help and use run_skill_script format
     for (const script of scripts) {
       if (ignoredFiles.includes(script) || script === "node_modules") continue;
       if (path.extname(script) !== ".js") continue;
@@ -167,6 +167,13 @@ function validateSkillDir(name, registrySkill) {
       const content = fs.readFileSync(scriptPath, "utf-8");
       if (!content.includes("--help")) {
         error(name, `script "${script}" must support --help`);
+        continue;
+      }
+      if (!content.includes("run_skill_script")) {
+        error(name, `script "${script}" --help output must use run_skill_script format`);
+      }
+      if (/Usage:.*bun\s+\S+\.js/i.test(content) || /Usage:.*node\s+\S+\.js/i.test(content)) {
+        error(name, `script "${script}" --help must not use bun/node CLI format, use run_skill_script instead`);
       }
     }
   }

@@ -63,7 +63,7 @@ The lint script (`bun run lint`) enforces these checks:
 | 9 | `hasScripts: true` requires `package.json` in scripts/ | error |
 | 10 | `package.json` in scripts/ requires `bun.lockb` | error |
 | 11 | `package.json` must have `name` and `version` fields | error |
-| 12 | `.js` scripts must support `--help` | error |
+| 12 | `.js` scripts must support `--help` with `run_skill_script` format (not `bun`/`node` CLI) | error |
 
 Additional checks:
 - Script files must have `.js` extension
@@ -85,6 +85,8 @@ skills/<name>/
 ```
 
 Scripts are executed via MoFlow's `run_skill_script` tool. AI agents call `run_skill_script("<script_name>", "<args>")` to execute skill scripts.
+
+Script `--help` output must use `run_skill_script` format (e.g. `Usage: run_skill_script("convert.js", "<args>")`), not `bun` or `node` CLI format. This is enforced by lint.
 
 ### SKILL.md frontmatter
 

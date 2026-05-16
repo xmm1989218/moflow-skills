@@ -104,6 +104,7 @@ Script execution is handled by MoFlow's `run_skill_script` tool:
 - Only `.js` scripts are supported
 - Scripts run via bun
 - **Scripts must support `--help` flag** — this is enforced by lint
+- **`--help` output must use `run_skill_script` format** — e.g. `Usage: run_skill_script("convert.js", "<args>")`, NOT `bun convert.js` or `node convert.js`
 - AI agents call `run_skill_script("<script_name>", "<args>")` to execute scripts
 - AI agents call `run_skill_script("<script_name>", "--help")` to view usage information
 - 30s timeout, max 30KB output
