@@ -3,25 +3,21 @@ import { resolve, dirname, basename, join } from "node:path";
 import { existsSync, mkdirSync } from "node:fs";
 
 function printHelp() {
-  console.log(`Usage: bun convert.js <input.md> [--html] [--pdf] [--output <dir>] [--help]
-
-Converts a Marp Markdown file to presentation format.
+  console.log(`Usage: run_skill_script("convert.js", "<input.md> [--html] [--pdf] [--output <dir>]")
 
 Arguments:
-  input.md            Input Markdown file (Marp format)
+  <input.md>            Input Markdown file (Marp format)
 
 Options:
-  --html              Generate HTML presentation
-  --pdf               Generate PDF presentation
-  --output <dir>      Output directory (default: same as input file)
-  --help, -h          Show this help message
-
-At least one output format (--html or --pdf) must be specified.
+  --html                Generate HTML presentation
+  --pdf                 Generate PDF presentation
+  --output <dir>        Output directory (default: same as input file)
+  --help, -h            Show this help message
 
 Examples:
-  bun convert.js slides.md --html
-  bun convert.js slides.md --html --pdf
-  bun convert.js slides.md --html --output ./presentations/
+  run_skill_script("convert.js", "slides.md --html")
+  run_skill_script("convert.js", "slides.md --html --pdf")
+  run_skill_script("convert.js", "slides.md --html --output ./presentations/")
 `);
   process.exit(0);
 }
