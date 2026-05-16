@@ -1,5 +1,18 @@
 # Changelog
 
+## v2026.5.16.1
+
+### Skills
+
+- **markdown-ppt** v1.4.0 → v1.5.0 (updated)
+  update --help output to use run_skill_script format instead of bun/node CLI
+  - Enforce run_skill_script format in script --help output
+
+### Changes
+
+- Merge pull request #2 from xmm1989218/update/markdown-ppt
+- Enforce run_skill_script format in script --help output
+
 ## v2026.5.15.4
 
 ### Skills
