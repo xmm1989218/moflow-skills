@@ -1,5 +1,17 @@
 # Changelog
 
+## v2026.5.17.2
+
+### Skills
+
+- **markdown-ppt** v1.5.1 → v1.5.2 (updated)
+  rename run_skill_script to runSkillScript
+  - rename run_skill_script to runSkillScript across all files
+
+### Changes
+
+- rename run_skill_script to runSkillScript across all files
+
 ## v2026.5.17.1
 
 ### Skills
