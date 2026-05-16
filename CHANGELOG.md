@@ -1,5 +1,17 @@
 # Changelog
 
+## v2026.5.17.1
+
+### Skills
+
+- **markdown-ppt** v1.5.0 → v1.5.1 (updated)
+  unify input param name to <input.md> in docs
+  - update(markdown-ppt): unify input param name to <input.md> in docs
+
+### Changes
+
+- update(markdown-ppt): unify input param name to <input.md> in docs
+
 ## v2026.5.16.1
 
 ### Skills
