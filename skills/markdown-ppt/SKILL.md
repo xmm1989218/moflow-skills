@@ -1,7 +1,7 @@
 ---
 name: markdown-ppt
 description: "Convert Markdown to HTML/PDF presentations using Marp. Guides writing slide-ready Markdown and provides a conversion script."
-version: "1.5.0"
+version: "1.5.1"
 license: MIT
 metadata:
   author: moflow
@@ -154,10 +154,10 @@ This skill includes a `convert.js` script to convert Marp Markdown to HTML or PD
 
 Call the script via the `run_skill_script` tool:
 
-- **Convert to HTML**: `run_skill_script("convert.js", "<file_path> --html")`
-- **Convert to PDF**: `run_skill_script("convert.js", "<file_path> --pdf")`
-- **Convert to both**: `run_skill_script("convert.js", "<file_path> --html --pdf")`
-- **Specify output directory**: `run_skill_script("convert.js", "<file_path> --html --output <dir>")`
+- **Convert to HTML**: `run_skill_script("convert.js", "<input.md> --html")`
+- **Convert to PDF**: `run_skill_script("convert.js", "<input.md> --pdf")`
+- **Convert to both**: `run_skill_script("convert.js", "<input.md> --html --pdf")`
+- **Specify output directory**: `run_skill_script("convert.js", "<input.md> --html --output <dir>")`
 
 If unsure about the script's arguments, call:
 
