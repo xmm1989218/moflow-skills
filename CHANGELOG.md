@@ -1,5 +1,16 @@
 # Changelog
 
+## v2026.5.15.4
+
+### Skills
+
+- **markdown-ppt** v1.3.0 → v1.4.0 (updated)
+  update script invocation to use run_skill_script tool instead of bash commands
+
+### Changes
+
+- fix: SKILL.md and docs use run_skill_script tool for script execution instead of bash
+
 ## v2026.5.15.3
 
 ### Skills

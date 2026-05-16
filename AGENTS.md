@@ -81,8 +81,10 @@ skills/<name>/
   scripts/               # Optional: executable scripts
     package.json         # Required if scripts/ exists
     bun.lock             # Required if package.json exists (commit to git)
-    helper.js            # Script files (.js only, executed via bun)
+    helper.js            # Script files (.js only, executed via run_skill_script tool)
 ```
+
+Scripts are executed via MoFlow's `run_skill_script` tool. AI agents call `run_skill_script("<script_name>", "<args>")` to execute skill scripts.
 
 ### SKILL.md frontmatter
 

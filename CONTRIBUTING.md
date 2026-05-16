@@ -66,13 +66,13 @@ skills/<name>/
     convert.js         # Script files (.js only)
 ```
 
-Only `.js` script files are supported. Scripts are executed via bun. Dependencies are managed via `package.json` and installed with `bun install`:
+Only `.js` script files are supported. Scripts are executed via MoFlow's `run_skill_script` tool. Dependencies are managed via `package.json` and installed with `bun install`:
 
 ```bash
 cd skills/<name>/scripts && bun install
 ```
 
-This generates `bun.lock` which must be committed to git.
+This generates `bun.lock` which must be committed to git. When the skill is installed via MoFlow, dependencies are installed automatically.
 
 If your scripts have external dependencies, set `hasScripts: true` and `hasDeps: true` in registry.yaml.
 

@@ -1,7 +1,7 @@
 ---
 name: markdown-ppt
 description: "Convert Markdown to HTML/PDF presentations using Marp. Guides writing slide-ready Markdown and provides a conversion script."
-version: "1.3.0"
+version: "1.4.0"
 license: MIT
 metadata:
   author: moflow
@@ -148,24 +148,22 @@ Inline: `$x^2 + y^2 = r^2$`
 
 ## Conversion Script
 
-Dependencies are managed via `package.json`. Install them first:
+This skill includes a `convert.js` script to convert Marp Markdown to HTML or PDF.
 
-```bash
-cd scripts && bun install
-```
+### How to use
 
-Then convert your Marp Markdown file:
+Call the script via the `run_skill_script` tool:
 
-```bash
-bun scripts/convert.js input.md --html
-bun scripts/convert.js input.md --pdf
-bun scripts/convert.js input.md --html --pdf
-bun scripts/convert.js input.md --html --output ./presentations/
-```
+- **Convert to HTML**: `run_skill_script("convert.js", "<file_path> --html")`
+- **Convert to PDF**: `run_skill_script("convert.js", "<file_path> --pdf")`
+- **Convert to both**: `run_skill_script("convert.js", "<file_path> --html --pdf")`
+- **Specify output directory**: `run_skill_script("convert.js", "<file_path> --html --output <dir>")`
 
-Run `bun scripts/convert.js --help` for full usage information.
+If unsure about the script's arguments, call:
 
-Output files are placed alongside the input file by default, or in the directory specified by `--output`.
+`run_skill_script("convert.js", "--help")`
+
+Dependencies are installed automatically by MoFlow when the skill is installed.
 
 ### PDF requirements
 
