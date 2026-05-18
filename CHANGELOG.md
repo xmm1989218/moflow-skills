@@ -1,5 +1,18 @@
 # Changelog
 
+## v2026.5.19.1
+
+### Skills
+
+- **documentation** v1.0.0 (updated)
+  add category and tags to registry.yaml
+- **markdown-ppt** v1.5.2 (updated)
+  add category and tags to registry.yaml
+
+### Changes
+
+- feat: add category and tags fields to registry.yaml with lint validation
+
 ## v2026.5.17.2
 
 ### Skills
