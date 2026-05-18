@@ -14,6 +14,8 @@ const REGISTRY_VERSION_REGEX = /^\d{4}\.\d{1,2}\.\d{1,2}\.\d+$/;
 const MAX_NAME_LENGTH = 64;
 const MAX_DESCRIPTION_LENGTH = 1024;
 
+const VALID_CATEGORIES = ["writing", "coding", "data", "productivity", "media", "other"];
+
 let errors = 0;
 let warnings = 0;
 
@@ -226,6 +228,16 @@ function validateRegistry() {
       error("registry.yaml", `skill "${entry.name}" missing version`);
     } else if (!SEMVER_REGEX.test(entry.version)) {
       error("registry.yaml", `skill "${entry.name}" version "${entry.version}" does not match semver format`);
+    }
+    if (!entry.category) {
+      error("registry.yaml", `skill "${entry.name}" missing category`);
+    } else if (!VALID_CATEGORIES.includes(entry.category)) {
+      error("registry.yaml", `skill "${entry.name}" category "${entry.category}" not in allowed list: ${VALID_CATEGORIES.join(", ")}`);
+    }
+    if (!entry.tags) {
+      error("registry.yaml", `skill "${entry.name}" missing tags`);
+    } else if (!Array.isArray(entry.tags) || entry.tags.length === 0) {
+      error("registry.yaml", `skill "${entry.name}" tags must be a non-empty array`);
     }
   }
 

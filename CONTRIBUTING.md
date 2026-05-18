@@ -89,6 +89,8 @@ skills:
   - name: <name>
     description: "<same as SKILL.md description>"
     version: "1.0.0"
+    category: writing           # Required: writing | coding | data | productivity | media | other
+    tags: [documentation, readme] # Required: non-empty array of strings
     license: MIT
     hasScripts: false
     hasDeps: false
@@ -156,6 +158,8 @@ Lint will detect content changes without a version bump (version drift).
 | 10 | `package.json` in scripts/ requires `bun.lockb` |
 | 11 | `package.json` must have `name` and `version` fields |
 | 12 | `.js` scripts must support `--help` with `runSkillScript` format (not `bun`/`node` CLI) |
+| 13 | `category` must be one of: `writing`, `coding`, `data`, `productivity`, `media`, `other` |
+| 14 | `tags` must be a non-empty array of strings |
 
 Lint also detects version drift: skill content changed but version not updated → error.
 

@@ -80,6 +80,8 @@ skills:
   - name: <name>
     description: "<same as SKILL.md description>"
     version: "1.0.0"
+    category: writing           # Required: writing | coding | data | productivity | media | other
+    tags: [documentation, readme] # Required: non-empty array of strings
     license: MIT
     hasScripts: false
     hasDeps: false

@@ -64,6 +64,8 @@ The lint script (`bun run lint`) enforces these checks:
 | 10 | `package.json` in scripts/ requires `bun.lockb` | error |
 | 11 | `package.json` must have `name` and `version` fields | error |
 | 12 | `.js` scripts must support `--help` with `runSkillScript` format (not `bun`/`node` CLI) | error |
+| 13 | `category` must be one of: `writing`, `coding`, `data`, `productivity`, `media`, `other` | error |
+| 14 | `tags` must be a non-empty array of strings | error |
 
 Additional checks:
 - Script files must have `.js` extension
@@ -145,6 +147,8 @@ skills:
   - name: <name>
     description: "<same as SKILL.md>"
     version: "1.0.0"            # Same as SKILL.md version
+    category: writing           # Required: writing | coding | data | productivity | media | other
+    tags: [documentation, readme] # Required: non-empty array of strings
     license: MIT
     hasScripts: false
     hasDeps: false               # true if scripts/ has dependencies (package.json with deps)
@@ -154,6 +158,8 @@ skills:
 
 - Registry `version` uses date-based format: `YYYY.M.D.N` (e.g. `2026.5.14.1`, `2026.5.14.2` for same-day releases)
 - Skill `version` must match the skill's SKILL.md version
+- `category` must be one of: `writing`, `coding`, `data`, `productivity`, `media`, `other`
+- `tags` must be a non-empty array of strings
 - `hasScripts` must be `true` if the skill has a `scripts/` directory with files
 - `updated` is set by the release script
 

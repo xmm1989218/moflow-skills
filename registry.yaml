@@ -4,6 +4,8 @@ skills:
   - name: documentation
     description: "Write clear, well-structured technical documentation. Use when writing README, API docs, architecture docs, or any technical documentation."
     version: "1.0.0"
+    category: writing
+    tags: [documentation, readme, api-docs]
     license: MIT
     hasScripts: false
     metadata:
@@ -11,6 +13,8 @@ skills:
   - name: markdown-ppt
     description: "Convert Markdown to HTML/PDF presentations using Marp. Guides writing slide-ready Markdown and provides a conversion script."
     version: "1.5.2"
+    category: media
+    tags: [marp, slides, html, pdf, presentation]
     license: MIT
     hasScripts: true
     hasDeps: true
